@@ -1,122 +1,127 @@
-//variables
-const tweetList = document.getElementById('tweet-list')
+// Variables
+const tweetList = document.getElementById('tweet-list');
 
 
+// Event Listeners
+eventListeners();
 
-//event listeners
-eventListeners()
+function eventListeners() {
+     // Form Submission
+     document.querySelector('#form').addEventListener('submit', newTweet);
 
-function eventListeners(){
-   //form submission
-   document.querySelector('#form').addEventListener('submit', newTweet)
+     // Remove tweet from the list
+     tweetList.addEventListener('click', removeTweet);
 
-   //remove tweet from the list
-   tweetList.addEventListener('click', removeTweet)
-
-   //document
-   document.addEventListener('DOMContentLoaded', localStorageOnLoad)
+     // Document
+     document.addEventListener('DOMContentLoaded', localStorageOnLoad);
 }
 
 
-//functions
+// Functions
 
-function newTweet(e){
-   e.preventDefault();
-  //read the text 
-   const tweet = document.getElementById('tweet').value;
+function newTweet(e) {
+     e.preventDefault();
 
-//create remove btn
-const removeBtn = document.createElement('a');
-removeBtn.classList = 'remove-tweet';
-removeBtn.textContent ='X'
+     // Read the textarea value
+     const tweet = document.getElementById('tweet').value;
 
-   //create an <li> element
-   const li = document.createElement('li');
-   li.textContent = tweet;
+     // Create the remove button
+     const removeBtn = document.createElement('a');
+     removeBtn.classList = 'remove-tweet';
+     removeBtn.textContent = 'X';
 
-   //add remove button to each tweet
-    li.appendChild(removeBtn);
-
-   //add to the list
-   tweetList.appendChild(li);
-
-
-//add to loc storage
-addTweetLocalStorage(tweet);
-
-//print the alert
-alert('Tweet Added')
-//clean the form
-this.reset();
-}
-
-//removes tweets frome the DOM
-function removeTweet(e){
-   if(e.target.classList.contains('remove-tweet')){
-      e.target.parentElement.remove()
-   }
-   //remove frome storage
-   removeTweetLocalStorage(e.target.parentElement.textContent)
-}
-
-//add the tweets to loc storage
-function addTweetLocalStorage(tweet){
-   let tweets = getTweetsFromeStorage();
-
-   //add the tweet into the arr
-   tweets.push(tweet);
-   //convert arr to string
-   localStorage.setItem('tweets', JSON.stringify(tweets))
-}
-
-function getTweetsFromeStorage(){
-   let tweets;
-   const tweetsLS = localStorage.getItem('tweets');
-   //if null => empty arr
-   if(tweetsLS===null){
-      tweets =[]
-   }else{
-      tweets = JSON.parse(tweetsLS)
-   }
-   return tweets;
-}
-
-//prints local storage tweets on load
-function localStorageOnLoad(){
-   let tweets = getTweetsFromeStorage();
-
-   //loop throught atorage and print the values
-   tweets.forEach(function(tweet){
-      //create remove btn
-      const removeBtn = document.createElement('a');
-      removeBtn.classList = 'remove-tweet';
-      removeBtn.textContent ='X'
-
-      //create an <li> element
-      const li = document.createElement('li');
-      li.textContent = tweet;
+     // Create an <li> element
+     const li = document.createElement('li');
+     li.textContent = tweet; 
      
+     // Add the remove button to each tweet
+     li.appendChild(removeBtn);
 
-       //add remove button to each tweet
-       li.appendChild(removeBtn);
+     // Add to the list
+     tweetList.appendChild(li);
 
-       //add to the list
-       tweetList.appendChild(li);
-   })
+     // add to Local Storage
+     addTweetLocalStorage(tweet);
+
+     // Print the alert
+     alert('Tweet Added');
+
+     this.reset();
+} 
+
+// Removes the Tweets from the DOM
+function removeTweet(e) {
+     if(e.target.classList.contains('remove-tweet')) {
+          e.target.parentElement.remove();
+     } 
+
+     // Remove from Storage
+      removeTweetLocalStorage( e.target.parentElement.textContent ) ;
 }
 
-//removes tweet frn loc storage
-function removeTweetLocalStorage(tweet){
-   //get tweets from the storage
-let tweets = getTweetsFromeStorage();
-//remove x from tweet
-const tweetDelite = tweet.substring(0,tweet.length -1)
-//loop throught the tweets and remove the tweets that equal
-tweets.forEach(function(tweetLS,index){
-if(tweetDelite===tweetLS){
-   tweets.splice(index, 1)
+// Adds the tweets into the local storage
+function addTweetLocalStorage(tweet) {
+     let tweets = getTweetsFromStorage();
+
+     // Add the tweet into the array
+     tweets.push(tweet);
+
+     // Convert tweet array into String
+     localStorage.setItem('tweets', JSON.stringify( tweets )  );
 }
-})
-//save the data
-localStorage.setItems('tweets', JSON.stringify(tweets))
+
+function getTweetsFromStorage() {
+     let tweets;
+     const tweetsLS = localStorage.getItem('tweets');
+     // Get the values, if null is returned then we create an empty array
+     if(tweetsLS === null) {
+          tweets = [];
+     } else {
+          tweets = JSON.parse( tweetsLS ); 
+     }
+     return tweets;
+}
+
+// Prints Local Storage Tweets on Load
+function localStorageOnLoad() {
+     let tweets = getTweetsFromStorage();
+
+     // Loop throught storage and then print the values
+     tweets.forEach(function(tweet) {
+          // Create the remove button
+          const removeBtn = document.createElement('a');
+          removeBtn.classList = 'remove-tweet';
+          removeBtn.textContent = 'X';
+
+          // Create an <li> element
+          const li = document.createElement('li');
+          li.textContent = tweet; 
+          
+          // Add the remove button to each tweet
+          li.appendChild(removeBtn);
+
+          // Add to the list
+          tweetList.appendChild(li);
+     });
+}
+
+// Removes the tweet from local storage
+
+function removeTweetLocalStorage(tweet) {
+     // get tweets from storage
+     let tweets = getTweetsFromStorage();
+
+     // Remove the X from the tweet
+
+     const tweetDelete = tweet.substring( 0, tweet.length -1 );
+
+     // Loop Throught  the tweets and remove the tweet that's equal
+     tweets.forEach(function(tweetLS, index) {
+          if(tweetDelete === tweetLS) {
+               tweets.splice(index, 1);
+          }
+     });
+
+     // Save the data 
+     localStorage.setItem('tweets', JSON.stringify(tweets) );
 }
